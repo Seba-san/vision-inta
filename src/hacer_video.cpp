@@ -36,7 +36,7 @@ int main(int argc, char **argv) {
 	    		return 0;
 	    	}
 	    if (argc==3){
-	    	direccion_video = argv[3];
+	    	direccion = argv[3];
 
 	    }
 	    if (argc==2){
@@ -48,7 +48,7 @@ int main(int argc, char **argv) {
 	        }
 
 
-
+	    direccion_video = direccion + "/video/estereo.avi";
 	// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Inicializacion
 	// Create a ZED Camera object
 	sl::Camera zed;
