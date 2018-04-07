@@ -156,6 +156,9 @@ int main(int argc, char **argv) {
 //			tiempo=(t_parcial.tv_sec - t_inicial.tv_sec)*1000000 ;
 //			tiempo+=t_parcial.tv_usec - t_inicial.tv_usec;
 			archivo << tiempo << "\n";
+//			nombre_stram << tiempo ;
+//			nombre=nombre_stram.str(); // Convierto a string el tiempo en que fue sacada la imagen asi luego lo guardo con ese nombre.
+
 			// Guardo imagen izquierda
 			zed.retrieveImage(zed_image, sl::VIEW_LEFT); // la guarda en la varible zed_image
 			image_ocvi= slMat2cvMat(zed_image);
@@ -172,7 +175,8 @@ int main(int argc, char **argv) {
 
 			// Guardo disparidad $ REVISAR ESTO
 //			t2=(double)cv::getTickCount();
-//			zed.retrieveMeasure(depth_image_zed, sl::MEASURE_DEPTH); // Get the left image
+			gettimeofday (&t_parcial, NULL); // tomo el tiempo de carga
+			zed.retrieveMeasure(depth_image_zed, sl::MEASURE_DEPTH); // Get the left image
 //			 // Retrieve the depth measure (32-bit)
 ////			zed.retrieveMeasure(depth_image_zed, sl::MEASURE_DEPTH);//MEASURE_DEPTH; VIEW_DEPTH; Con Measure_DEPTH devuelve una matriz de 32 bits, con view_depth, es de 8 bits. Para fines ilustrativos, usar el view
 //			depth_image_ocv = ta	(depth_image_zed); // OJO hay que pasarlo a 8bit, ver en registros del 01/03
@@ -184,7 +188,7 @@ int main(int argc, char **argv) {
 
 //			saveDepth(zed,direccion + "/imagenes/"+ nombre + ext);
 			//			t2=(double)cv::getTickCount();
-//			cv::imwrite( direccion + "/imagenes/" + nombre + ".exr", depth_image_ocv);
+			cv::imwrite( direccion + "video/disparidad/" + num + ".exr", depth_image_ocv);
 //			t2 = ((double)cv::getTickCount() - t2);
 
 			num=num+1;

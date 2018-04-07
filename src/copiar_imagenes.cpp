@@ -42,7 +42,34 @@ int main(int argc, char **argv) {
 //	    (void) pthread_create(&tId, 0, userInput_thread, 0); //Para que corra hasta presionar 'k'
 
 
-	unsigned int segundos=5;
+		std::string direccion ("/tmp/discoRAM");//("/home/nvidia/discoaye");//("/media/nvidia/GIVSI/Datasets");//("/home/nvidia/discoaye");/media/nvidia/GIVSI/Datasets/Prueba180314
+//		std::string direccion_video = direccion + "/video/estereo.avi";
+		unsigned int segundos=1;
+	//	long int vara = std::strtol(,,10);
+	//	long int vara = std::atoi(argv[2]);
+
+
+		if (argc<2){
+		    		std::cout << "Debe ingresar la cantidad de segundos que desea grabar" << std::endl;
+		    		std::cout << "y de forma optativa ingresar la direccion en donde se grabaran" << std::endl;
+		    		std::cout << "con el siguiente formato: [cantidad_seg] [opt: direccion]" << std::endl;
+		    		std::cout << "por defecto sera: " << direccion << std::endl;
+		    		return 0;
+		    	}
+		    if (argc==3){
+		    	direccion = argv[3];
+
+		    }
+		    if (argc==2){
+		    	std::cout << "las imagenes se guardara en la siguiente direccion: " << std::endl;
+		    	std::cout <<  direccion << std::endl;
+		    	std::cout <<  "Ademas se guardaran " << segundos *15 <<" frames"<< std::endl;
+		    	//return 0;
+
+		        }
+
+
+
 	// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Inicializacion
 	// Create a ZED Camera object
 	sl::Camera zed;
@@ -69,12 +96,14 @@ int main(int argc, char **argv) {
 	sl::Mat zed_image (zed.getResolution(),sl::MAT_TYPE_8U_C3);
 	sl::Mat zed_image2 (zed.getResolution(),sl::MAT_TYPE_8U_C3);
 	cv::Mat image_ocvd, image_ocvi,image_ocvt,image_ocvt2;
+	sl::Mat  depth_image_zed(zed.getResolution(), sl::MAT_TYPE_32F_C1);
+	cv::Mat depth16;
 //	cv::Mat depth_image (zed.getResolution(),CV_8UC1);
-	sl::Mat depth_image_zed (zed.getResolution(),sl::MAT_TYPE_8U_C1);//sl::MAT_TYPE_8U_C1);//sl::MAT_TYPE_32F_C1);
+//	sl::Mat depth_image_zed (zed.getResolution(),sl::MAT_TYPE_8U_C1);//sl::MAT_TYPE_8U_C1);//sl::MAT_TYPE_32F_C1);
 	cv::Mat depth_image_ocv;
 	cv::Mat depth_image_reducida;//(zed.getResolution(),cv::CV_32UC1);
 	std::string ext (".jpg"); // .jpg,JPEG2000
-	std::string direccion ("/home/nvidia/discoaye");//("/media/nvidia/GIVSI/Datasets");//("/home/nvidia/discoaye");/media/nvidia/GIVSI/Datasets/Prueba180314
+//	std::string direccion ("/home/nvidia/discoaye");//("/media/nvidia/GIVSI/Datasets");//("/home/nvidia/discoaye");/media/nvidia/GIVSI/Datasets/Prueba180314
 	std::string nombre;
 	std::stringstream nombre_stram;
 	std::vector<int> compression_params;
@@ -86,9 +115,9 @@ int main(int argc, char **argv) {
     int frames_per_second =15;
     cv::Size frame_size2(1280*2, 720);
     cv::Size frame_size(1280, 720);
-    int codec = cv::VideoWriter::fourcc('M', 'J', 'P', 'G');
-    std::string direccion_video = direccion + "/video/estereo.avi";
-    std::string direccion_video2 = direccion + "/video/Profundidad.avi";
+//    int codec = cv::VideoWriter::fourcc('M', 'J', 'P', 'G');
+//    std::string direccion_video = direccion + "/video/estereo.avi";
+//    std::string direccion_video2 = direccion + "/video/Profundidad.avi";
 
 //    // PROBANDO CON VIDEOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
 //   	cv::VideoWriter oVideoWriteri(direccion + "/video/Pruebai.avi", cv::VideoWriter::fourcc('M', 'J', 'P', 'G'), frames_per_second, frame_size, true);
@@ -118,6 +147,9 @@ int main(int argc, char **argv) {
 //													return -1;
 //							   }
 
+
+
+
 	char key = ' ';
 	unsigned long long timestamp,timestamp2,rest;
 	unsigned long long tiempopromedio=0;
@@ -126,7 +158,12 @@ int main(int argc, char **argv) {
 	// time_stamp
 	struct timeval t_inicial, t_parcial ;
 	unsigned long long tiempo;
-
+	std::string direccion_archivo = direccion + "/imagenes/registro.txt";
+	std::ofstream archivo;
+	archivo.open (direccion_archivo);
+//	cv::FileStorage file("some_name.ext", cv::FileStorage::WRITE);
+//	 cv::FileStorage file(direccion + "/imagenes/"+ nombre + ".xml", cv::FileStorage::WRITE);
+	 cv::FileStorage file(direccion + "/imagenes/deph.xml", cv::FileStorage::WRITE);
 
 	int aux=0;
 
@@ -137,11 +174,22 @@ int main(int argc, char **argv) {
 	while (aux==0) {
 		//key = cv::waitKey(1);
 		if (zed.grab() == sl::SUCCESS) {
+			/*
 			gettimeofday (&t_parcial, NULL); // tomo el tiempo de carga
 			tiempo=(t_parcial.tv_sec - t_inicial.tv_sec)*1000000 ;
 			tiempo+=t_parcial.tv_usec - t_inicial.tv_usec;
 			nombre_stram << tiempo ;
 			nombre=nombre_stram.str();
+			*/
+
+			gettimeofday (&t_parcial, NULL); // tomo el tiempo de carga
+						tiempo=t_parcial.tv_sec*1000000 + t_parcial.tv_usec ;
+			//			tiempo=(t_parcial.tv_sec - t_inicial.tv_sec)*1000000 ;
+			//			tiempo+=t_parcial.tv_usec - t_inicial.tv_usec;
+						archivo << tiempo << "\n";
+						nombre_stram << tiempo ;
+						nombre=nombre_stram.str();
+
 //			t=(double)cv::getTickCount();
 //
 //			timestamp = zed.getCameraTimestamp(); // Get the timestamp of the image
@@ -162,6 +210,7 @@ int main(int argc, char **argv) {
 //			cv::cvtColor(image_ocvt, image_ocvt2, CV_RGB2BGR);
 //			t2=(double)cv::getTickCount();
 //			oVideoWritert.write(image_ocvt);
+//			cv::imwrite( direccion +"/imagenes/" + nombre + ext, image_ocvt,compression_params);
 			cv::imwrite( direccion +"/imagenes/" + nombre + ext, image_ocvt,compression_params);
 
 //			t2 = ((double)cv::getTickCount() - t2);
@@ -170,17 +219,26 @@ int main(int argc, char **argv) {
 
 			// Guardo disparidad $ REVISAR ESTO
 //			t2=(double)cv::getTickCount();
-//			zed.retrieveMeasure(depth_image_zed, sl::MEASURE_DEPTH); // Get the left image
+			zed.retrieveMeasure(depth_image_zed, sl::MEASURE_DEPTH); // Get the left image
 //			 // Retrieve the depth measure (32-bit)
 ////			zed.retrieveMeasure(depth_image_zed, sl::MEASURE_DEPTH);//MEASURE_DEPTH; VIEW_DEPTH; Con Measure_DEPTH devuelve una matriz de 32 bits, con view_depth, es de 8 bits. Para fines ilustrativos, usar el view
 //			depth_image_ocv = ta	(depth_image_zed); // OJO hay que pasarlo a 8bit, ver en registros del 01/03
-////			depth_image_ocv.convertTo(image_ocvt2,CV_8UC1);
+//			depth_image_ocv.convertTo(image_ocvt2,CV_8UC1);
 //			profundidad.write(depth_image_ocv);
 //			t2 = ((double)cv::getTickCount() - t2);
 //			std::cout << "profundidad  " << t2*1000/(cv::getTickFrequency())<< " ms." << std::endl;
 
+			 depth_image_ocv = slMat2cvMat(depth_image_zed);
 
-//			saveDepth(zed,direccion + "/imagenes/"+ nombre + ext);
+			 depth_image_ocv.convertTo(depth16, CV_16UC1); // esto se ve en: https://docs.opencv.org/3.1.0/d3/d63/classcv_1_1Mat.html#a3f356665bb0ca452e7d7723ccac9a810
+
+
+			 // Write to file!
+			 file << depth16 << " tiempo " << nombre ;
+
+			 //			 cv::imwrite(direccion + "/imagenes/"+ nombre+"dis" + ext, depth16,compression_params);
+
+//			saveDepth(zed,direccion + "/imagenes/"+ nombre+"dis" );
 			//			t2=(double)cv::getTickCount();
 //			cv::imwrite( direccion + "/imagenes/" + nombre + ".exr", depth_image_ocv);
 //			t2 = ((double)cv::getTickCount() - t2);
@@ -200,22 +258,26 @@ int main(int argc, char **argv) {
 
 			nombre_stram.str(""); // limpio la variable stringstream, sino se acomula indefinidamente y colapsa el programa
 			aux=0; // Para que no salga del while y ver si graba piola;
-
 			num=num+1;
-					if (num>frames_max){aux=1;
-//					keep_running = false;
-					gettimeofday (&t_parcial, NULL);
-					tiempo=(t_parcial.tv_sec - t_inicial.tv_sec)*1000000 ;
-					tiempo+=t_parcial.tv_usec - t_inicial.tv_usec;
-					std::cout << "Se grabaron "<< num - 1 << " frames " << std::endl;
-					std::cout << "en un tiempo de "<< tiempo << " us " << std::endl;
-					}
-//					std::cout << "Se completaron la cantidad de frames especuladas"<< std::endl;
-//					std::cout << "Tiempo promedio "<< tiempopromedio*1000/(num*cv::getTickFrequency()) << std::endl;
-//					std::cout << "Tiempo maximo "<< t3*1000/(cv::getTickFrequency()) << std::endl;
-//					}
 
 		}
+		//			tiempopromedio = tiempopromedio +t ;
+		//			std::cout << "tiempo de computo " << t*1000/(cv::getTickFrequency())<< " ms." << std::endl;
+		//
+		//			nombre_stram.str(""); // limpio la variable stringstream, sino se acomula indefinidamente y colapsa el programa
+		//			aux=0; // Para que no salga del while y ver si graba piola;
+		//
+
+							if (num>frames_max){aux=1;
+							gettimeofday (&t_parcial, NULL);
+							tiempo=(t_parcial.tv_sec - t_inicial.tv_sec)*1000000 ;
+							tiempo+=t_parcial.tv_usec - t_inicial.tv_usec;
+							std::cout << "Se grabaron "<< num - 1 << " frames " << std::endl;
+							std::cout << "en un tiempo de "<< tiempo << " us " << std::endl;
+		//					std::cout << "Se completaron la cantidad de frames especuladas"<< std::endl;
+		//					std::cout << "Tiempo promedio "<< tiempopromedio*1000/(num*cv::getTickFrequency()) << std::endl;
+		//					std::cout << "Tiempo maximo "<< t3*1000/(cv::getTickFrequency()) << std::endl;
+							}
 
 	}
 
@@ -232,6 +294,9 @@ int main(int argc, char **argv) {
 	zed.disableRecording();
 	// Exit
 	zed.close();
+	archivo.close();
+	 file.release();
+
 //	 oVideoWriteri.release();
 //	 oVideoWritert.release();
 //	 profundidad.release();
@@ -301,7 +366,7 @@ void saveDepth(sl::Camera& zed, std::string filename) {
 //float max_value = std::numeric_limits<unsigned short int>::max();
 //float scale_factor = max_value / zed.getDepthMaxRangeValue();
 sl::DEPTH_FORMAT Depth_format;
-Depth_format = static_cast<sl::DEPTH_FORMAT> (2 % 3); // el 0 es para que lo guarde en png y 2 pgm
+Depth_format = static_cast<sl::DEPTH_FORMAT> (0 % 3); // el 0 es para que lo guarde en png y 2 pgm
 
 
 //std::cout << "Saving Depth Map... " << flush;
@@ -313,4 +378,11 @@ bool saved = sl::saveDepthAs(zed, Depth_format, filename.c_str(), 1);
 //}
 }
 
-
+/*
+void saveDepth2(sl::Mat  depth_image_zed, std::string filename) {
+// Convert to 16Bit
+                    cv::Mat depth16;
+                    depth_image_ocv.convertTo(depth16, CV_16UC1); // esto se ve en: https://docs.opencv.org/3.1.0/d3/d63/classcv_1_1Mat.html#a3f356665bb0ca452e7d7723ccac9a810
+                    cv::imwrite(filename2.str(), depth16);
+}
+*/
