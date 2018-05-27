@@ -4,13 +4,13 @@
 clc;clear all;close all;
 % img_dir=setPc('vaio');% server o vaio
 FRAME=150;
-FRAME_Fin=FRAME+750;
-Parametros=CargarParametros(FRAME,FRAME_Fin,'vaio');
+FRAME_Fin=FRAME+50;
+Parametros=CargarParametros(FRAME,FRAME_Fin,'lenovo');
 [Data,Parametros]=EscaneoInicial(Parametros);
 save('DatosPoster.mat','Parametros','Data');
 clc;clear all
 load('DatosPoster.mat');% Datos 50 en realidad.
-Parametros.IMAGENES=0;
+Parametros.IMAGENES=1;
 [Distencia,Data,Parametros]=EscaneoContinuo(Parametros,Data); %Guarda los datos en un archivo que sellama "jueves" rastrarlo dentro del soft
 %%
 Generador_txt(Distancia)

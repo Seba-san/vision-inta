@@ -13,4 +13,11 @@ if strcmp(Compu,'vaio')
     img_dir= 'E:\Facultad\Becas\CIN\TRABAJo\Dataset\partidas\image';
     %img_dir= 'E:\Facultad\Becas\CIN\TRABAJo\Dataset\prueba11\Partidas\image';
 end
+if strcmp(Compu,'lenovo')
+    cd '/home/seba/Dropbox/Facultad/CIN/Proyectos/programasMatlab';
+    addpath('/home/seba/Dropbox/Facultad/CIN/Proyectos/programasMatlab/Funciones')
+    %  img_dir= 'E:\Facultad\Becas\CIN\TRABAJo\Dataset\partidas';
+    img_dir= '/media/seba/Datos/Facultad_bk/Becas/CIN/TRABAJo/Dataset/partidas/image';
+    %img_dir= 'E:\Facultad\Becas\CIN\TRABAJo\Dataset\prueba11\Partidas\image';
+end
 end
