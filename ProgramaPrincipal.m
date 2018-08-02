@@ -2,7 +2,7 @@
 % programas :O
 
 clc;clear all;close all;
-% img_dir=setPc('vaio');% server o vaio
+img_dir=setPc('lenovo');% server o vaio
 FRAME=150;
 FRAME_Fin=FRAME+50;
 Parametros=CargarParametros(FRAME,FRAME_Fin,'lenovo');
