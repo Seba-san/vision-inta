@@ -1,5 +1,5 @@
 function [Data,Parametros]=EscaneoInicial(Parametros)
-I2a = imread(sprintf('%s%1di.jpg',Parametros.img_dir,Parametros.FRAME));
+I2a = imread(sprintf('%s/%s',Parametros.img_dir_izq(Parametros.FRAME).folder,Parametros.img_dir_izq(Parametros.FRAME).name));
 I2a = undistortImage(I2a,Parametros.Camara.L);
 % I1 = undistortImage(IR,Camara.R);
 %Extraigo los centros positivos, TARDA UNA BOCHA

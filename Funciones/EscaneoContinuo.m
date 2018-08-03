@@ -17,8 +17,8 @@ Seguir=1;
 while Seguir==1
     Data.iteracion=i;
     Parametros.FrameActual=FRAME1;
-    I1a=imread(sprintf('%s%1dd.jpg',Parametros.img_dir,FRAME1));
-    I2a=imread(sprintf('%s%1di.jpg',Parametros.img_dir,FRAME1));
+    I1a=imread(sprintf('%s/%s',Parametros.img_dir_der(Parametros.FrameActual).folder,Parametros.img_dir_der(Parametros.FrameActual).name));
+    I2a=imread(sprintf('%s/%s',Parametros.img_dir_izq(Parametros.FrameActual).folder,Parametros.img_dir_izq(Parametros.FrameActual).name));
     [Data.Img.I,~,Data.Img.outliers]=FunProf(I1a,I2a,Parametros);
     Data.Img.I2a = undistortImage(I2a,Parametros.Camara.L);
     Data.Img.I1a=I1a;

@@ -2,15 +2,16 @@
 % programas :O
 
 clc;clear all;close all;
-img_dir=setPc('lenovo');% server o vaio
-FRAME=150;
+setPc_('lenovo');% server o vaio
+FRAME=9000;
 FRAME_Fin=FRAME+50;
 Parametros=CargarParametros(FRAME,FRAME_Fin,'lenovo');
 [Data,Parametros]=EscaneoInicial(Parametros);
-save('DatosPoster.mat','Parametros','Data');
+save('Datos_abril18.mat','Parametros','Data');
+%%
 clc;clear all
-load('DatosPoster.mat');% Datos 50 en realidad.
-Parametros.IMAGENES=1;
+load('Datos_abril18.mat');% Datos 50 en realidad.
+Parametros.IMAGENES=0;
 [Distencia,Data,Parametros]=EscaneoContinuo(Parametros,Data); %Guarda los datos en un archivo que sellama "jueves" rastrarlo dentro del soft
 %%
 Generador_txt(Distancia)
@@ -118,6 +119,7 @@ xlabel('Direccion Frontal [m]'),ylabel('Direccion Lateral [m]'),ylim([-4 4]),gri
 title('Localizacion y Mapeo'), legend('Tronco','Posicion de la camara')
 
 
+%%
 
 
 

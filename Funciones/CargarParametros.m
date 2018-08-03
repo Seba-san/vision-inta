@@ -1,5 +1,7 @@
 function [Parametros]=CargarParametros(FRAME,FRAME_Fin,pc)
-Parametros.img_dir=setPc(pc);
+[izq,der]=setPc(pc);
+Parametros.img_dir_der=dir(der);
+Parametros.img_dir_izq=dir(izq);
 cellSize = [8 8];
 hogFeatureSize = 6336;
 Parametros.Caracteristicas={cellSize hogFeatureSize};
